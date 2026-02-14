@@ -1,0 +1,40 @@
+version: "1"
+
+app:
+  name: telegram-music-player
+  
+services:
+  - name: music-player-service
+    type: web
+    
+    build:
+      type: docker
+      dockerfile: Dockerfile
+    
+    instance:
+      type: nano
+    
+    ports:
+      - port: 3000
+        protocol: http
+    
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "3000"
+    
+    health_checks:
+      - http:
+          port: 3000
+          path: /
+          interval: 30s
+          timeout: 5s
+          grace_period: 60s
+    
+    scaling:
+      min: 1
+      max: 1
+    
+    regions:
+      - fra
